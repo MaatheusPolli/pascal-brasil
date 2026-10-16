@@ -1,0 +1,20 @@
+name: FPC
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar Free Pascal
+        run: sudo apt-get update && sudo apt-get install -y fpc
+      - name: Compilar e executar testes
+        run: bash run-tests-fpc.sh
+      - name: Compilar ConsoleDemo
+        run: |
+          cd samples/ConsoleDemo && mkdir -p bin
+          fpc -Mdelphi -FUbin -FEbin -Fu../../src -Fu../../src/Documentos -Fu../../src/Mascaras -Fu../../src/Pix -Fu../../src/Consultas ConsoleDemo.dpr
+          ./bin/ConsoleDemo

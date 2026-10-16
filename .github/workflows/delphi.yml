@@ -1,0 +1,24 @@
+name: Delphi
+
+# Runners hospedados do GitHub não têm Delphi instalado: este job exige um
+# runner self-hosted Windows com Delphi (edição com compilador de linha de
+# comando) e o label "delphi".
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: [self-hosted, windows, delphi]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compilar e executar DUnitX
+        shell: powershell
+        run: .\build.ps1
+      - name: Publicar resultados
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dunitx-results
+          path: tests/bin/dunitx-results.xml
